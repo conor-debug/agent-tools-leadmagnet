@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>15 Best Open-Source AI Agent Tools — Blockcircle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0b09;
+    --surface: #141210;
+    --border: #222018;
+    --border-bright: #3a3020;
+    --amber: #f5a623;
+    --red: #e8413c;
+    --text: #d4cfc4;
+    --muted: #6b6456;
+    --white: #f0ece3;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* TOPBAR */
+  .topbar { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; }
+  .topbar-logo { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; }
+  .topbar-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* GATE VIEW */
+  #gate-view { padding: 72px 0 80px; animation: fadeUp 0.7s ease both; }
+
+  .breaking-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 28px;
+  }
+  .breaking-tag::before {
+    content: ''; display: block; width: 6px; height: 6px;
+    background: var(--red); border-radius: 50%; animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 80px);
+    line-height: 0.95; letter-spacing: 0.01em; color: var(--white); margin-bottom: 20px;
+  }
+  h1 em { color: var(--amber); font-style: normal; }
+
+  .gate-sub {
+    font-size: 16px; color: #8a8074; line-height: 1.65; margin-bottom: 48px; max-width: 520px;
+  }
+  .gate-sub strong { color: var(--text); font-weight: 500; }
+
+  /* Locked list preview */
+  .locked-preview {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 24px; margin-bottom: 32px;
+  }
+  .preview-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .preview-items { display: flex; flex-direction: column; gap: 10px; }
+  .preview-item {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted);
+  }
+  .preview-item::before { content: ''; display: block; width: 14px; height: 1px; background: var(--amber); opacity: 0.3; flex-shrink: 0; }
+  .preview-item.blurred { filter: blur(4px); user-select: none; opacity: 0.25; }
+  .lock-note {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--amber);
+    letter-spacing: 0.1em; text-align: center; margin-top: 14px; opacity: 0.6;
+  }
+
+  /* Form */
+  .gate-form { display: flex; flex-direction: column; gap: 12px; }
+  .gate-form input[type="email"] {
+    background: #0c0b09; border: 1px solid var(--border-bright); color: var(--white);
+    font-family: 'IBM Plex Mono', monospace; font-size: 14px; padding: 16px 20px;
+    outline: none; width: 100%; transition: border-color 0.2s;
+  }
+  .gate-form input[type="email"]::placeholder { color: var(--muted); }
+  .gate-form input[type="email"]:focus { border-color: var(--amber); }
+  .submit-btn {
+    background: var(--amber); color: #0c0b09; border: none;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 28px;
+    cursor: pointer; transition: background 0.15s; width: 100%;
+  }
+  .submit-btn:hover { background: #f7b84a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .form-note { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.05em; text-align: center; }
+  .form-error { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red); display: none; }
+
+  /* LIST VIEW */
+  #list-view { display: none; padding: 64px 0 80px; }
+  #list-view.visible { display: block; animation: fadeUp 0.6s ease both; }
+
+  .list-header { margin-bottom: 40px; }
+  .list-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+  .list-eyebrow::before { content: '// '; opacity: 0.5; }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 56px); color: var(--white); letter-spacing: 0.01em; margin-bottom: 10px; line-height: 1; }
+  .list-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* Tool cards */
+  .tools { display: flex; flex-direction: column; gap: 2px; }
+  .tool {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 20px 24px; display: grid; grid-template-columns: 40px 1fr;
+    gap: 16px; align-items: start; transition: border-color 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .tool:hover { border-color: var(--border-bright); }
+  .tool-num { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; color: var(--amber); padding-top: 3px; }
+  .tool-name { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 5px; letter-spacing: -0.01em; }
+  .tool-desc { font-size: 13px; color: #6a6358; line-height: 1.55; margin-bottom: 8px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.05em; }
+  .tag.green { border-color: rgba(0,200,100,0.2); color: #4a9; }
+  .tag.yellow { border-color: rgba(245,166,35,0.2); color: #a87; }
+  .tag.red { border-color: rgba(232,65,60,0.15); color: #a66; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--border); padding: 24px 0; position: relative; z-index: 1; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+  .footer-link { color: var(--muted); text-decoration: none; }
+  .footer-link:hover { color: var(--amber); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 480px) {
+    .tool { grid-template-columns: 32px 1fr; }
+    h1 { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <span class="topbar-logo">Blockcircle</span>
+    <span class="topbar-tag">AI Intelligence Report</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- GATE VIEW -->
+  <div id="gate-view">
+    <div class="breaking-tag">This Month's Intel</div>
+    <h1>The <em>15</em> Best<br>Open-Source<br>Agent Tools</h1>
+    <p class="gate-sub">
+      Open-source AI agent infrastructure just crossed a threshold.
+      <strong>This is the full list of every tool worth your attention this month</strong>,
+      filtered for license, complexity, and real business use case.
+    </p>
+
+    <div class="locked-preview">
+      <div class="preview-label">// Preview</div>
+      <div class="preview-items">
+        <div class="preview-item">01 — OpenFang &nbsp; Agent OS, local deploy, Rust, Apache 2.0</div>
+        <div class="preview-item blurred">02 — XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+        <div class="preview-item blurred">03 — XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+        <div class="preview-item blurred">04 — XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+        <div class="preview-item blurred">05 through 15 — XXXXXXXXXXXXXXXXXX</div>
+      </div>
+      <div class="lock-note">[ 14 entries locked — enter email to reveal ]</div>
+    </div>
+
+    <div class="gate-form">
+      <input type="email" id="email-input" placeholder="your@email.com" autocomplete="email" />
+      <span class="form-error" id="form-error">Please enter a valid email address.</span>
+      <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Reveal the Full List &rarr;</button>
+      <p class="form-note">No spam. One email. Unsubscribe any time.</p>
+    </div>
+  </div>
+
+  <!-- LIST VIEW (revealed after email) -->
+  <div id="list-view">
+    <div class="list-header">
+      <div class="list-eyebrow">Full List — Unlocked</div>
+      <h2>15 Open-Source<br>Agent Tools</h2>
+      <p class="list-sub">Every tool filtered for license type, technical complexity, and business use case.</p>
+    </div>
+
+    <div class="tools">
+
+      <div class="tool" style="animation-delay:0.05s">
+        <span class="tool-num">01</span>
+        <div>
+          <div class="tool-name">OpenFang</div>
+          <div class="tool-desc">Agent Operating System that runs any AI agent locally on your machine. Zero-config MCP tool integration. Written in Rust for speed. Hit 6,600 GitHub stars in 5 days.</div>
+          <div class="tags"><span class="tag green">Apache 2.0</span><span class="tag">Local</span><span class="tag green">Low complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.1s">
+        <span class="tool-num">02</span>
+        <div>
+          <div class="tool-name">CrewAI</div>
+          <div class="tool-desc">Multi-agent orchestration framework. Define roles and goals and let agents collaborate on complex multi-step tasks. Best for automating business workflows that currently require a team.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.15s">
+        <span class="tool-num">03</span>
+        <div>
+          <div class="tool-name">AutoGen Studio</div>
+          <div class="tool-desc">Microsoft's visual interface for building multi-agent workflows. Drag-and-drop agent building with no code required for basic setups. Good entry point for non-technical founders.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">UI Available</span><span class="tag green">Low complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.2s">
+        <span class="tool-num">04</span>
+        <div>
+          <div class="tool-name">LangGraph</div>
+          <div class="tool-desc">Build stateful, cyclical agent graphs. Best for agents that need to loop, retry, or branch based on intermediate results. More control than most frameworks but steeper learning curve.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag red">High complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.25s">
+        <span class="tool-num">05</span>
+        <div>
+          <div class="tool-name">Open Interpreter</div>
+          <div class="tool-desc">Gives an LLM access to your terminal, browser, and files. Executes code locally. Powerful for data tasks and file automation. Think of it as an AI that can operate your computer.</div>
+          <div class="tags"><span class="tag yellow">AGPL-3.0</span><span class="tag">Local</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.3s">
+        <span class="tool-num">06</span>
+        <div>
+          <div class="tool-name">Agno (formerly Phidata)</div>
+          <div class="tool-desc">Build agents with memory, knowledge, and tools using pure Python. Clean API, fast to prototype. Strong fit for finance and data-heavy use cases. One of the most actively maintained frameworks.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.35s">
+        <span class="tool-num">07</span>
+        <div>
+          <div class="tool-name">Browser Use</div>
+          <div class="tool-desc">Open-source browser automation for AI agents. Lets agents navigate websites, fill forms, and extract data without needing an API. Strong Playwright integration under the hood.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.4s">
+        <span class="tool-num">08</span>
+        <div>
+          <div class="tool-name">Composio</div>
+          <div class="tool-desc">240+ pre-built integrations for AI agents. Connects agents to Gmail, Slack, GitHub, Notion, and Salesforce without writing auth code. Biggest time saver for building production agents fast.</div>
+          <div class="tags"><span class="tag green">Apache 2.0</span><span class="tag">Cloud + Local</span><span class="tag green">Low complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.45s">
+        <span class="tool-num">09</span>
+        <div>
+          <div class="tool-name">smolagents (HuggingFace)</div>
+          <div class="tool-desc">Minimal agent framework from HuggingFace. Runs local models with tool use. Best for teams that want full model control without cloud dependency or API costs.</div>
+          <div class="tags"><span class="tag green">Apache 2.0</span><span class="tag">Local Models</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.5s">
+        <span class="tool-num">10</span>
+        <div>
+          <div class="tool-name">Agency Swarm</div>
+          <div class="tool-desc">Build structured agent teams with defined communication flows. Each agent has a specific role. Good for replacing repetitive internal team processes that currently eat up human hours.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.55s">
+        <span class="tool-num">11</span>
+        <div>
+          <div class="tool-name">Atomic Agents</div>
+          <div class="tool-desc">Lightweight, modular agent framework built on Instructor. Forces you to define input and output schemas, which makes agents significantly more reliable in production than looser frameworks.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.6s">
+        <span class="tool-num">12</span>
+        <div>
+          <div class="tool-name">Pydantic AI</div>
+          <div class="tool-desc">Agent framework from the Pydantic team. Strongly-typed, production-grade, model-agnostic. Built for teams who prioritise reliability over speed of prototyping. The enterprise-grade option.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Python</span><span class="tag red">High complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.65s">
+        <span class="tool-num">13</span>
+        <div>
+          <div class="tool-name">Camel-AI</div>
+          <div class="tool-desc">Multi-agent role-playing framework for simulation and synthetic data generation. Good for generating training data and stress-testing complex agent interactions before deploying in production.</div>
+          <div class="tags"><span class="tag green">Apache 2.0</span><span class="tag">Python</span><span class="tag yellow">Medium complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.7s">
+        <span class="tool-num">14</span>
+        <div>
+          <div class="tool-name">OpenHands (formerly OpenDevin)</div>
+          <div class="tool-desc">Full software development agent that reads code, writes code, runs tests, and pushes to GitHub. Replaces a significant portion of junior dev work. One of the most impressive open-source agents available right now.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">Local + Cloud</span><span class="tag green">Low complexity</span></div>
+        </div>
+      </div>
+
+      <div class="tool" style="animation-delay:0.75s">
+        <span class="tool-num">15</span>
+        <div>
+          <div class="tool-name">Praison AI</div>
+          <div class="tool-desc">Low-code multi-agent framework built for production. YAML-based configuration means non-developers can define agent workflows without writing Python. The most accessible option for business owners.</div>
+          <div class="tags"><span class="tag green">MIT</span><span class="tag">YAML Config</span><span class="tag green">Low complexity</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="wrap footer-inner">
+    <span>&copy; 2025 Blockcircle Indonesia</span>
+    <a href="https://twitter.com/RealCryptoConor" class="footer-link" target="_blank">@RealCryptoConor</a>
+  </div>
+</div>
+
+<script>
+  const WEBHOOK_URL = 'https://n8n.blockcircle.com/webhook/agent-tools-leadmagnet';
+
+  async function handleSubmit() {
+    const emailInput = document.getElementById('email-input');
+    const submitBtn  = document.getElementById('submit-btn');
+    const errorEl    = document.getElementById('form-error');
+
+    const email = emailInput.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      errorEl.style.display = 'block';
+      emailInput.focus();
+      return;
+    }
+
+    errorEl.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Unlocking...';
+
+    // Fire and forget — reveal the list regardless of webhook response
+    // so CORS issues on the hosting side don't block the user experience
+    try {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          source: 'agent-tools-leadmagnet',
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {});
+    } catch(e) {}
+
+    // Always reveal the list after a short delay
+    setTimeout(() => {
+      document.getElementById('gate-view').style.display = 'none';
+      const listView = document.getElementById('list-view');
+      listView.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 600);
+  }
+
+  document.getElementById('email-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleSubmit();
+  });
+</script>
+
+</body>
+</html>
